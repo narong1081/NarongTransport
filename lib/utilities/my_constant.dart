@@ -4,7 +4,7 @@ class MyConstant {
   //field
   static Color primary = Color.fromARGB(255, 243, 98, 98);
   static Color dark = Color.fromARGB(255, 33, 66, 171);
-  static Color light = Color.fromARGB(255, 204, 244, 193);
+  static Color light = Color.fromARGB(255, 214, 243, 206);
 
   static List<String> typeUsers = [
     'Owner',
