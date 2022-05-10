@@ -14,11 +14,11 @@ class ShowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       width: 250,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: MyConstant.primary,
+          primary: MyConstant.dark,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
         onPressed: pressFunc,

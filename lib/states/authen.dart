@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:narong_transport/states/create_account.dart';
 import 'package:narong_transport/utilities/my_constant.dart';
 import 'package:narong_transport/widgets/showbutton.dart';
 import 'package:narong_transport/widgets/showform.dart';
@@ -19,7 +20,7 @@ class Authen extends StatelessWidget {
           behavior: HitTestBehavior.opaque,
           onTap: () => FocusScope.of(context).requestFocus(FocusScopeNode()),
           child: Container(
-            decoration: MyConstant().planbox(),
+            decoration: MyConstant().imageBox(),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +30,7 @@ class Authen extends StatelessWidget {
                   newEmail(),
                   newPassword(),
                   newButton(),
-                  newCreateAccount(),
+                  newCreateAccount(context: context),
                 ],
               ),
             ),
@@ -41,24 +42,30 @@ class Authen extends StatelessWidget {
 
   Row newLeftSide(Widget widget) {
     return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 250,
-                      child: widget,
-                    ),
-                  ],
-                );
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 250,
+          child: widget,
+        ),
+      ],
+    );
   }
 
-  Row newCreateAccount() {
+  Row newCreateAccount({required BuildContext context}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const ShowText(label: 'Non Account?'),
         ShowTextButton(
           label: 'Create Account',
-          pressFunc: () {},
+          pressFunc: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateAccount(),
+                ));
+          },
         ),
       ],
     );
@@ -88,15 +95,21 @@ class Authen extends StatelessWidget {
     );
   }
 
-  ShowText newText() {
-    return ShowText(
-      label: 'Login',
-      textStyle: MyConstant().h1Style(),
+  Widget newText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ShowText(
+          label: 'Login',
+          textStyle: MyConstant().h1Style(),
+        ),
+      ],
     );
   }
 
   Widget newLogo(BoxConstraints constraints) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
           child: const ShowImage(),
