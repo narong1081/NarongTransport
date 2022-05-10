@@ -5,6 +5,10 @@ class MyConstant {
   static Color primary = Color.fromARGB(255, 243, 98, 98);
   static Color dark = Color.fromARGB(255, 33, 66, 171);
   static Color light = Color.fromARGB(255, 214, 243, 206);
+  static Color myDarkNavyBlue = Color.fromARGB(255, 58, 106, 138);
+  static Color myNavyBlue = Color.fromARGB(255, 121, 174, 220);
+  static Color myGreen = Color.fromARGB(255, 188, 230, 222);
+  static Color myPink = Color.fromARGB(255, 252, 131, 131);
 
   static List<String> typeUsers = [
     'Owner',
@@ -29,7 +33,7 @@ class MyConstant {
 
   TextStyle h1Style() {
     return TextStyle(
-      color: dark,
+      color: myDarkNavyBlue,
       fontSize: 36,
       fontWeight: FontWeight.bold,
     );
@@ -37,23 +41,23 @@ class MyConstant {
 
   TextStyle h2Style() {
     return TextStyle(
-      color: dark,
+      color: myNavyBlue,
       fontSize: 18,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w500,
     );
   }
 
   TextStyle h3Style() {
     return TextStyle(
-      color: dark,
+      color: myNavyBlue,
       fontSize: 14,
       fontWeight: FontWeight.normal,
     );
   }
 
   TextStyle h3Active() {
-    return const TextStyle(
-      color: Colors.pink,
+    return  TextStyle(
+      color: myPink,
       fontSize: 14,
       fontWeight: FontWeight.bold,
     );

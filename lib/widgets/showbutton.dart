@@ -18,7 +18,7 @@ class ShowButton extends StatelessWidget {
       width: 250,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: MyConstant.dark,
+          primary: MyConstant.myDarkNavyBlue,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
         onPressed: pressFunc,

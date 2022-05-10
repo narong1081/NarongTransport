@@ -23,7 +23,7 @@ class MyDialog {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: MyConstant.light.withOpacity(1),
+        backgroundColor: MyConstant.myGreen,
         title: ShowListTile(
           title: title,
           subTitle: subTitle,
@@ -56,7 +56,7 @@ class MyDialog {
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: MyConstant.light.withOpacity(1),
+        backgroundColor: MyConstant.myGreen,
         title: ShowListTile(
           title: title,
           subTitle: subTitle,

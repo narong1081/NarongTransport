@@ -42,7 +42,7 @@ class ShowForm extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: MyConstant.primary),
+            borderSide: BorderSide(color: MyConstant.myPink),
             borderRadius: BorderRadius.circular(10),
           ),
         ),

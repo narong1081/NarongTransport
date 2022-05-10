@@ -20,7 +20,7 @@ class ShowIconButton extends StatelessWidget {
       onPressed: pressFunc,
       icon: Icon(
         iconData,
-        color: MyConstant.dark,
+        color: MyConstant.myDarkNavyBlue,
         size: size ?? 24,
       ),
     );
