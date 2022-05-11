@@ -1,17 +1,28 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:narong_transport/models/authen_model.dart';
+import 'package:narong_transport/models/response_false_model.dart';
 import 'package:narong_transport/states/create_account.dart';
 import 'package:narong_transport/states/register.dart';
 import 'package:narong_transport/utilities/my_constant.dart';
+import 'package:narong_transport/utilities/my_dialog.dart';
 import 'package:narong_transport/widgets/showbutton.dart';
 import 'package:narong_transport/widgets/showform.dart';
 import 'package:narong_transport/widgets/showimage.dart';
 import 'package:narong_transport/widgets/showtext.dart';
 import 'package:narong_transport/widgets/showtextbutton.dart';
 
-class Authen extends StatelessWidget {
+class Authen extends StatefulWidget {
   const Authen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<Authen> createState() => _AuthenState();
+}
+
+class _AuthenState extends State<Authen> {
+  String? rollerid, username, password;
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +34,35 @@ class Authen extends StatelessWidget {
           child: Container(
             decoration: MyConstant().imageBox(),
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  newLeftSide(newLogo(constraints)),
-                  newLeftSide(newText()),
-                  newEmail(),
-                  newPassword(),
-                  newButton(),
-                  newCreateAccount(context: context),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    newLeftSide(newLogo(constraints)),
+                    newLeftSide(newText()),
+                    newRollerID(),
+                    newUsername(),
+                    newPassword(),
+                    newButton(),
+                    newCreateAccount(context: context),
+                  ],
+                ),
               ),
             ),
           ),
         );
       }),
+    );
+  }
+
+  ShowForm newRollerID() {
+    return ShowForm(
+      label: 'Roller ID :',
+      iconData: Icons.account_box_outlined,
+      textInputType: TextInputType.number,
+      changeFunc: (String string) {
+        rollerid = string.trim();
+      },
     );
   }
 
@@ -75,7 +100,17 @@ class Authen extends StatelessWidget {
   ShowButton newButton() {
     return ShowButton(
       label: 'Login',
-      pressFunc: () {},
+      pressFunc: () {
+        if ((rollerid?.isEmpty ?? true) ||
+            (username?.isEmpty ?? true) ||
+            (password?.isEmpty ?? true)) {
+          MyDialog(context: context).normalDialog(
+              title: 'Your login info is wrong!',
+              subTitle: 'Please enter your info.');
+        } else {
+          processCheckAuthen();
+        }
+      },
     );
   }
 
@@ -84,15 +119,20 @@ class Authen extends StatelessWidget {
       label: 'Password :',
       iconData: Icons.lock_outline_rounded,
       obsecu: true,
-      changeFunc: (String string) {},
+      changeFunc: (String string) {
+        password = string.trim();
+      },
     );
   }
 
-  ShowForm newEmail() {
+  ShowForm newUsername() {
     return ShowForm(
-      label: 'Email :',
-      iconData: Icons.contact_mail_outlined,
-      changeFunc: (String string) {},
+      label: 'Username :',
+      iconData: Icons.account_circle_outlined,
+      textInputType: TextInputType.number,
+      changeFunc: (String string) {
+        username = string.trim();
+      },
     );
   }
 
@@ -118,5 +158,34 @@ class Authen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> processCheckAuthen() async {
+    AuthenModel authenModel = AuthenModel(
+      rollerid: rollerid!,
+      username: username!,
+      password: password!,
+    );
+
+    await Dio()
+        .post(
+      MyConstant.pathAuthen,
+      data: authenModel.toMap(),
+    )
+        .then((value) {
+      print('Connect api success! values ==> $value');
+      ResponseFalseModel responseFalseModel =
+          ResponseFalseModel.fromMap(value.data);
+      if (responseFalseModel.ResponseStatus == 'Failed') {
+        MyDialog(context: context).normalDialog(
+          title: 'Cannot login!',
+          subTitle: responseFalseModel.ResponseMessages,
+        );
+      } else {
+        print('Login success!');
+      }
+    }).catchError((onError) {
+      print('Connect api error!');
+    });
   }
 }

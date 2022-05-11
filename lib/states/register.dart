@@ -152,7 +152,7 @@ class _RegisterState extends State<Register> {
         // print('Register success values : $value');
         ResponseTrueModel responseTrueModel =
             ResponseTrueModel.fromJson(value.data);
-        print('responseTrueModel : ${responseTrueModel.toJson()}');
+        // print('responseTrueModel : ${responseTrueModel.toJson()}');
         MyDialog(context: context).normalDialog(
           title: 'Register Success',
           subTitle: '***Your Login info***',
