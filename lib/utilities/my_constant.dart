@@ -16,6 +16,9 @@ class MyConstant {
     'Driver',
   ];
 
+  static String pathRegister = 'https://www.rollerglobal.com/api/api/Member/register';
+  static String pathLogin = 'https://www.rollerglobal.com/api/api/Member/login';
+
   //method
   BoxDecoration curveBorderBox() => BoxDecoration(
         border: Border.all(
@@ -23,7 +26,7 @@ class MyConstant {
         ),
         borderRadius: BorderRadius.circular(10),
       );
-  BoxDecoration planbox() => BoxDecoration(color: light.withOpacity(0.5));
+  BoxDecoration planbox() => BoxDecoration(color: myGreen.withOpacity(0.3));
   BoxDecoration imageBox() => const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('images/bg.jpg'),
@@ -56,7 +59,7 @@ class MyConstant {
   }
 
   TextStyle h3Active() {
-    return  TextStyle(
+    return TextStyle(
       color: myPink,
       fontSize: 14,
       fontWeight: FontWeight.bold,
