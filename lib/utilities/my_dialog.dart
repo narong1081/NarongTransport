@@ -52,6 +52,8 @@ class MyDialog {
   Future<void> normalDialog({
     required String title,
     required String subTitle,
+    Function()? pressFunc,
+    Widget? widget,
   }) async {
     showDialog(
       context: context,
@@ -65,11 +67,13 @@ class MyDialog {
         actions: [
           ShowTextButton(
             label: 'OK',
-            pressFunc: () {
-              Navigator.pop(context);
-            },
+            pressFunc: pressFunc ??
+                () {
+                  Navigator.pop(context);
+                },
           ),
         ],
+        content: widget ?? const SizedBox(),
       ),
     );
   }

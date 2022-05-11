@@ -4,7 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:narong_transport/models/response_false_model.dart';
+import 'package:narong_transport/models/response_true_model.dart';
 import 'package:narong_transport/models/user_model.dart';
+import 'package:narong_transport/states/authen.dart';
 import 'package:narong_transport/utilities/my_constant.dart';
 import 'package:narong_transport/utilities/my_dialog.dart';
 import 'package:narong_transport/widgets/show_form_phone.dart';
@@ -33,7 +35,7 @@ class _RegisterState extends State<Register> {
     DateTime dateTime = DateTime.now();
     int year = dateTime.year + 543;
     yearRegis = year.toString();
-    print('yearRegis : $yearRegis');
+    // print('yearRegis : $yearRegis');
   }
 
   @override
@@ -98,6 +100,11 @@ class _RegisterState extends State<Register> {
                             title: 'Phone number is incorrect!',
                             subTitle: 'Please check your phone number',
                           );
+                        } else  if (phoneNumber!.contains('')) {
+                          MyDialog(context: context).normalDialog(
+                            title: 'Phone number is incorrect!',
+                            subTitle: 'You have space!,Please check your phone number',
+                          );
                         } else {
                           processRegister();
                         }
@@ -114,7 +121,7 @@ class _RegisterState extends State<Register> {
   }
 
   Future<void> processRegister() async {
-    print('Phone number : $phoneNumber');
+    // print('Phone number : $phoneNumber');
     UserModel userModel = UserModel(
         year: yearRegis!,
         gentype: genType,
@@ -122,7 +129,7 @@ class _RegisterState extends State<Register> {
         infriendid: inFriendId);
 
     Map<String, dynamic> map = userModel.toMap();
-    print('map : $map');
+    // print('map : $map');
 
     await Dio()
         .post(
@@ -130,20 +137,48 @@ class _RegisterState extends State<Register> {
       data: map,
     )
         .then((value) {
-      print('Success Register value : $value');
+      // print('Success Register value : $value');
       //get value from API response
       ResponseFalseModel responseFalseModel =
           ResponseFalseModel.fromMap(value.data);
-      print('responseFalseModel : ${responseFalseModel.toMap()}');
+      // print('responseFalseModel : ${responseFalseModel.toMap()}');
 
       if (responseFalseModel.ResponseStatus == 'Failed') {
         MyDialog(context: context).normalDialog(
           title: 'Cannot register!',
           subTitle: responseFalseModel.ResponseMessages,
         );
-      } else {}
+      } else {
+        // print('Register success values : $value');
+        ResponseTrueModel responseTrueModel =
+            ResponseTrueModel.fromJson(value.data);
+        print('responseTrueModel : ${responseTrueModel.toJson()}');
+        MyDialog(context: context).normalDialog(
+          title: 'Register Success',
+          subTitle: '***Your Login info***',
+          widget: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ShowText(
+                  label:
+                      'Roller ID : ${responseTrueModel.responseData![0].rollerid}'),
+              ShowText(
+                  label:
+                      'Username : ${responseTrueModel.responseData![0].username}'),
+              ShowText(
+                  label:
+                      'Password : ${responseTrueModel.responseData![0].password}'),
+            ],
+          ),
+          pressFunc: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        );
+      }
     }).catchError((onError) {
-      print('onError ==> ${onError.toString()}');
+      // print('onError ==> ${onError.toString()}');
     });
   }
 }
