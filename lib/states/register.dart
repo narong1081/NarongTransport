@@ -178,7 +178,7 @@ class _RegisterState extends State<Register> {
         );
       }
     }).catchError((onError) {
-      // print('onError ==> ${onError.toString()}');
+      print('onError ==> ${onError.toString()}');
     });
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:narong_transport/models/authen_model.dart';
@@ -173,7 +175,7 @@ class _AuthenState extends State<Authen> {
       data: authenModel.toMap(),
     )
         .then((value) {
-      print('Connect api success! values ==> $value');
+      // print('Connect api success! values ==> $value');
       ResponseFalseModel responseFalseModel =
           ResponseFalseModel.fromMap(value.data);
       if (responseFalseModel.ResponseStatus == 'Failed') {
@@ -185,7 +187,7 @@ class _AuthenState extends State<Authen> {
         print('Login success!');
       }
     }).catchError((onError) {
-      print('Connect api error!');
+      print('onError ==> ${onError.toString()}');
     });
   }
 }
