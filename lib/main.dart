@@ -2,7 +2,10 @@
 
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:narong_transport/models/authen_model.dart';
+import 'package:narong_transport/models/success_authen_model.dart';
 import 'package:narong_transport/states/authen.dart';
 import 'package:narong_transport/states/my_service.dart';
 import 'package:narong_transport/utilities/my_constant.dart';
@@ -23,11 +26,29 @@ Future<void> main() async {
 
   if (token?.isEmpty ?? true) {
     firstState = '/authen';
+    runApp(const MyApp());
   } else {
-    firstState = '/myService';
-  }
+    AuthenModel authenModel = AuthenModel(
+      rollerid: preferences.getString(MyConstant.keyRollerId)!,
+      username: preferences.getString(MyConstant.keyUsername)!,
+      password: preferences.getString(MyConstant.keyPassword)!,
+    );
+    await Dio()
+        .post(MyConstant.pathAuthen, data: authenModel.toMap())
+        .then((value) async {
+      SuccessAuthenModel successAuthenModel =
+          SuccessAuthenModel.fromJson(value.data);
+      String newToken = successAuthenModel.responseData![0].token.toString();
+      print('new token ==> $newToken');
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString(MyConstant.keyToken, newToken).then((value) {
+        firstState = '/myService';
+      });
+    });
 
-  runApp(const MyApp());
+    firstState = '/myService';
+    runApp(const MyApp());
+  }
 }
 
 class MyApp extends StatelessWidget {
