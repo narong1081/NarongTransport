@@ -1,10 +1,32 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:narong_transport/states/authen.dart';
+import 'package:narong_transport/states/my_service.dart';
+import 'package:narong_transport/utilities/my_constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+final Map<String, WidgetBuilder> map = {
+  '/authen': (context) => const Authen(),
+  '/myService': (context) => const MyService(),
+};
+String? firstState;
+
+Future<void> main() async {
   HttpOverrides.global = MyHttpOverride();
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String? token = preferences.getString(MyConstant.keyToken);
+  print('## token at main ==> $token');
+
+  if (token?.isEmpty ?? true) {
+    firstState = '/authen';
+  } else {
+    firstState = '/myService';
+  }
+
   runApp(const MyApp());
 }
 
@@ -15,8 +37,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Authen(),
+    return MaterialApp(
+      routes: map,
+      initialRoute: firstState ?? '/authen',
     );
   }
 }

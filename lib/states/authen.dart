@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:narong_transport/models/authen_model.dart';
 import 'package:narong_transport/models/response_false_model.dart';
+import 'package:narong_transport/models/success_authen_model.dart';
 import 'package:narong_transport/states/create_account.dart';
 import 'package:narong_transport/states/register.dart';
 import 'package:narong_transport/utilities/my_constant.dart';
@@ -13,6 +14,7 @@ import 'package:narong_transport/widgets/showform.dart';
 import 'package:narong_transport/widgets/showimage.dart';
 import 'package:narong_transport/widgets/showtext.dart';
 import 'package:narong_transport/widgets/showtextbutton.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Authen extends StatefulWidget {
   const Authen({
@@ -25,6 +27,24 @@ class Authen extends StatefulWidget {
 
 class _AuthenState extends State<Authen> {
   String? rollerid, username, password;
+  TextEditingController rolleridController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    forTestAuthen();
+  }
+
+  void forTestAuthen() {
+    rolleridController.text = '6510000081';
+    usernameController.text = '0807653843';
+    passwordController.text = '517222';
+
+    rollerid = rolleridController.text;
+    username = usernameController.text;
+    password = passwordController.text;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +85,7 @@ class _AuthenState extends State<Authen> {
       changeFunc: (String string) {
         rollerid = string.trim();
       },
+      controller: rolleridController,
     );
   }
 
@@ -103,6 +124,7 @@ class _AuthenState extends State<Authen> {
     return ShowButton(
       label: 'Login',
       pressFunc: () {
+        // print('rollerid : $rollerid');
         if ((rollerid?.isEmpty ?? true) ||
             (username?.isEmpty ?? true) ||
             (password?.isEmpty ?? true)) {
@@ -124,6 +146,7 @@ class _AuthenState extends State<Authen> {
       changeFunc: (String string) {
         password = string.trim();
       },
+      controller: passwordController,
     );
   }
 
@@ -135,6 +158,7 @@ class _AuthenState extends State<Authen> {
       changeFunc: (String string) {
         username = string.trim();
       },
+      controller: usernameController,
     );
   }
 
@@ -180,14 +204,33 @@ class _AuthenState extends State<Authen> {
           ResponseFalseModel.fromMap(value.data);
       if (responseFalseModel.ResponseStatus == 'Failed') {
         MyDialog(context: context).normalDialog(
-          title: 'Cannot login!',
+          title: 'Login Failed!',
           subTitle: responseFalseModel.ResponseMessages,
         );
       } else {
-        print('Login success!');
+        SuccessAuthenModel successAuthenModel =
+            SuccessAuthenModel.fromJson(value.data);
+        // print(
+        //     'Login success! Token ==> ${successAuthenModel.responseData![0].token}');
+        processSaveUser(successAuthenModel: successAuthenModel);
       }
     }).catchError((onError) {
       print('onError ==> ${onError.toString()}');
     });
+  }
+
+  Future<void> processSaveUser(
+      {required SuccessAuthenModel successAuthenModel}) async {
+    String token = successAuthenModel.responseData![0].token.toString();
+    // print('token ==> $token');
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString(MyConstant.keyRollerId, rollerid!);
+    preferences.setString(MyConstant.keyUsername, username!);
+    preferences.setString(MyConstant.keyPassword, password!);
+    preferences.setString(MyConstant.keyToken, token);
+
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/myService', (route) => false);
   }
 }

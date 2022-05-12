@@ -7,8 +7,13 @@ class MyConstant {
   static Color light = Color.fromARGB(255, 214, 243, 206);
   static Color myDarkNavyBlue = Color.fromARGB(255, 58, 106, 138);
   static Color myNavyBlue = Color.fromARGB(255, 121, 174, 220);
-  static Color myGreen = Color.fromARGB(255, 188, 230, 222);
+  static Color myGreen = Color.fromARGB(255, 193, 248, 216);
   static Color myPink = Color.fromARGB(255, 252, 131, 131);
+
+  static String keyRollerId = 'rollerid';
+  static String keyUsername = 'username';
+  static String keyPassword = 'password';
+  static String keyToken = 'token';
 
   static List<String> typeUsers = [
     'Owner',
